@@ -2,10 +2,16 @@ import snapshot from '@/data/acervo.json';
 import images from '@/data/images.json';
 import sanitizeHtml from 'sanitize-html';
 export function plain(html:string){return sanitizeHtml(html,{allowedTags:[],allowedAttributes:{}}).replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').replace(/&quot;/g,'"').replace(/&#x([\da-f]+);/gi,(_,n)=>String.fromCodePoint(parseInt(n,16)));}
-export type Entry={id:number;slug:string;title:string;date:string;categories:string[];categoryIds:number[];excerpt:string;image:string;original:string;type:string;search:string};
-export const records=[...snapshot.posts,...snapshot.pages];
+export type RawRecord={id:number;slug:string;date:string;link:string;type:string;title:{rendered:string};content:{rendered:string};excerpt:{rendered:string};categories?:number[]};
+export type Entry={id:number;slug:string;title:string;date:string;categories:string[];categoryIds:number[];excerpt:string;image:string;original:string;type:string;search:string;source:'archive'|'live'};
+export function normalizeRecord(raw:RawRecord,categoryLookup:Map<number,string>,image:string,source:'archive'|'live'):Entry{
+ const ids=raw.categories??[];
+ return {id:raw.id,slug:raw.slug,title:plain(raw.title.rendered),date:raw.date,categories:ids.map(id=>categoryLookup.get(id)||''),categoryIds:ids,excerpt:plain(raw.excerpt.rendered),image,original:raw.link,type:raw.type,search:plain(raw.content.rendered),source};
+}
+export const records:RawRecord[]=[...snapshot.posts,...snapshot.pages];
 const mediaMap=images as Record<string,{path:string}>;
-export const entries:Entry[]=records.map(p=>{const ids='categories' in p?p.categories:[];return {id:p.id,slug:p.slug,title:plain(p.title.rendered),date:p.date,categories:ids.map(id=>snapshot.categories.find(c=>c.id===id)?.name||''),categoryIds:ids,excerpt:plain(p.excerpt.rendered),image:mediaMap[p.id]?.path||'',original:p.link,type:p.type,search:plain(p.content.rendered)};}).sort((a,b)=>b.date.localeCompare(a.date));
+const archiveCategoryLookup=new Map(snapshot.categories.map(c=>[c.id,c.name]));
+export const entries:Entry[]=records.map(p=>normalizeRecord(p,archiveCategoryLookup,mediaMap[p.id]?.path||'','archive')).sort((a,b)=>b.date.localeCompare(a.date));
 export const categories=snapshot.categories.map(c=>({id:c.id,name:c.name,slug:c.slug,count:c.count}));
 export const capturedAt=snapshot.capturedAt;
 export function contentHTML(html:string){

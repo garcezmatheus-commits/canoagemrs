@@ -1,5 +1,6 @@
 'use client';
 // Source: DavidHDev/react-bits, Waves. License in THIRD-PARTY-NOTICES.md.
+// No internal prefers-reduced-motion/visibility guard — callers (e.g. Currents.tsx) must gate rendering.
 import React, { useRef, useEffect, type CSSProperties } from 'react';
 
 

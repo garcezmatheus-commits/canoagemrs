@@ -45,3 +45,4 @@ tsconfig.tsbuildinfo
 /.codex/
 /outputs/
 /work/
+.claude/scheduled_tasks.lock

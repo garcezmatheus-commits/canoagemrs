@@ -13,7 +13,9 @@ export default function HeroMedia(){
   const el=video.current;if(!el)return;
   const motion=matchMedia('(prefers-reduced-motion: reduce)');
   const sync=()=>{
-   if(document.hidden||!visible.current||userPaused.current||motion.matches){el.pause();return;}
+   const connection=(navigator as unknown as {connection?:{saveData?:boolean;effectiveType?:string}}).connection;
+   const limitedConnection=!!connection?.saveData||['slow-2g','2g','3g'].includes(connection?.effectiveType||'');
+   if(document.hidden||!visible.current||userPaused.current||motion.matches||limitedConnection){el.pause();return;}
    void el.play().catch(()=>setPaused(true));
   };
   const observer=new IntersectionObserver(([entry])=>{visible.current=entry.isIntersecting;sync()},{threshold:0.05});

@@ -8,7 +8,7 @@ export default function SiteHeader(){
  const logo=useRef<HTMLAnchorElement>(null);
  useEffect(()=>{
   const motion=matchMedia('(prefers-reduced-motion: reduce)');let frame=0;
-  const update=()=>{frame=0;const progress=motion.matches?0:Math.min(window.scrollY/300,1);logo.current?.style.setProperty('--sticker-angle',`${-5+progress*7}deg`);logo.current?.style.setProperty('--sticker-y',`${progress*7}px`);};
+  const update=()=>{frame=0;const y=window.scrollY;const progress=motion.matches?0:Math.min(y/300,1);const el=logo.current;if(!el)return;el.style.setProperty('--sticker-angle',`${-5+progress*7}deg`);el.style.setProperty('--sticker-y',`${progress*7}px`);el.style.setProperty('--sticker-shrink',String(motion.matches?(y>60?1:0):progress));};
   const scroll=()=>{if(!frame)frame=requestAnimationFrame(update);};
   window.addEventListener('scroll',scroll,{passive:true});motion.addEventListener('change',update);update();
   return()=>{window.removeEventListener('scroll',scroll);motion.removeEventListener('change',update);cancelAnimationFrame(frame);};

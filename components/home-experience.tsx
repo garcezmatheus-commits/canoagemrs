@@ -22,7 +22,7 @@ export default function HomeExperience({news,events,latest,calendar}:{news:Entry
  const ctx=gsap.context(()=>{
  gsap.from('.hero-lead > *',{y:30,opacity:0,duration:.9,stagger:.11,ease:'power3.out',delay:.15});
  gsap.set('.hero-story',{autoAlpha:0,y:45});
- const t=gsap.timeline({scrollTrigger:{trigger:'.hero',start:'top top',end:()=>`+=${innerHeight*(innerWidth>760?1.5:1)}`,pin:true,scrub:1,anticipatePin:1,invalidateOnRefresh:true}});
+ const t=gsap.timeline({scrollTrigger:{trigger:'.hero',start:()=>`top ${document.querySelector<HTMLElement>('.site-header')?.offsetHeight??0}px`,end:()=>`+=${innerHeight*(innerWidth>760?1.5:1)}`,pin:true,scrub:1,anticipatePin:1,invalidateOnRefresh:true}});
  t.to('.hero-photo',{scale:1.18,xPercent:-3,ease:'none',duration:1},0).to('.hero-shade',{opacity:1,duration:1},0).to('.hero-lead',{y:-65,autoAlpha:0,duration:.32},.12).to('.hero-story',{y:0,autoAlpha:1,duration:.32},.43).to('.hero-progress-fill',{scaleX:1,ease:'none',duration:1},0);
  gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach(el=>gsap.from(el,{y:35,opacity:0,duration:.8,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 93%',once:true}}));
  },root);

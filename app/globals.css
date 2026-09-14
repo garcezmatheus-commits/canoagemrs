@@ -103,3 +103,39 @@ h1,h2,h3{text-wrap:balance}
  .latest-list>a{grid-template-columns:1fr 17px;gap:8px}
  .latest-list>a time{grid-column:1/-1}
 }
+
+/* Calendário da temporada — cores dos cards seguem a arte oficial do calendário. */
+.calendar-section{background:var(--paper)}
+.calendar-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.calendar-card{position:relative;display:flex;flex-direction:column;min-height:330px;padding:26px 24px 24px;color:white;background:var(--navy)}
+.calendar-card.tone-green{background:#007c43}
+.calendar-card.tone-red{background:#c8102e}
+.calendar-card.tone-yellow{background:var(--yellow);color:var(--navy-deep)}
+.calendar-card.tone-done{background:#e9eaee;color:#5d5d70}
+.calendar-card.is-next{box-shadow:0 18px 40px -18px #141239a0}
+.calendar-status{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;min-height:26px;padding:0 10px;font-size:.6875rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase}
+.calendar-status:empty{visibility:hidden}
+.tone-done .calendar-status{background:var(--navy);color:white}
+.is-next .calendar-status{background:white;color:var(--navy-deep)}
+.tone-yellow.is-next .calendar-status{background:var(--navy-deep);color:white}
+.calendar-card time{display:flex;align-items:flex-end;gap:12px;margin:34px 0 28px}
+.calendar-card time strong{font-family:Barlow,'Arial Narrow',sans-serif;font-size:clamp(4.5rem,6vw,6rem);line-height:.8}
+.calendar-card time span{font-family:Barlow,'Arial Narrow',sans-serif;font-size:1.25rem;line-height:1.05;text-transform:uppercase}
+.calendar-place{display:flex;align-items:center;gap:8px;font-family:Barlow,'Arial Narrow',sans-serif;font-size:1.5rem;text-transform:uppercase}
+.calendar-place svg{flex:none}
+.calendar-card p{margin-top:auto;padding-top:16px;border-top:1px solid currentColor;font-size:.875rem;line-height:1.5}
+.calendar-card p b{font-weight:750}
+.tone-done p{border-color:#c6c7d1}
+.calendar-note{margin-top:22px;font-size:.75rem;color:#636376}
+@media(max-width:1100px){.calendar-grid{grid-template-columns:repeat(2,1fr)}.calendar-card{min-height:280px}}
+@media(max-width:640px){
+ .calendar-grid{grid-template-columns:1fr;gap:10px}
+ .calendar-card{min-height:0;display:grid;grid-template-columns:auto 1fr;column-gap:20px;padding:18px}
+ .calendar-status{grid-column:1/-1;justify-self:start;margin-bottom:14px}
+ .calendar-status:empty{display:none}
+ .calendar-card time{grid-row:span 2;width:5.5rem;flex-direction:column;align-items:flex-start;gap:6px;margin:0}
+ .calendar-card time strong{font-size:3.5rem}
+ .calendar-card time span{font-size:.875rem}
+ .calendar-place{font-size:1.25rem;align-self:end}
+ .calendar-card p{margin-top:8px;padding-top:8px}
+}

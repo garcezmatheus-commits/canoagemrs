@@ -1,7 +1,10 @@
 import HomeExperience from '@/components/home-experience';
 import {getSiteContent} from '@/lib/site-content';
 import type {Entry} from '@/lib/acervo';
+import {calendar2026,withStatus} from '@/lib/calendario';
 const EVENT_CATEGORY_SLUGS=['campeonatos','convite','calendario'];
+// Regera a home a cada hora para o status das etapas (realizada/próxima) acompanhar a data.
+export const revalidate=3600;
 export default async function Home(){
  const {entries,categories}=await getSiteContent();
  const lean=(e:Entry)=>({...e,search:''});
@@ -12,5 +15,5 @@ export default async function Home(){
  const news=entries.filter(e=>e.type==='post'&&e.image&&!latestIds.has(e.id)).slice(0,3).map(lean);
  const eventCategoryIds=categories.filter(c=>EVENT_CATEGORY_SLUGS.includes(c.slug)).map(c=>c.id);
  const events=entries.filter(e=>e.type==='post'&&e.categoryIds.some(id=>eventCategoryIds.includes(id))).slice(0,3).map(lean);
- return <HomeExperience news={news} events={events} latest={latest.map(lean)}/>;
+ return <HomeExperience news={news} events={events} latest={latest.map(lean)} calendar={withStatus(calendar2026)}/>;
 }

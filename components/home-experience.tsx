@@ -10,6 +10,7 @@ import Magnet from './react-bits/Magnet';
 import HomeSections from './home-sections';
 import SiteFooter from './site-footer';
 import HeroMedia from './hero-media';
+import AsenaGallery from './asena-gallery';
 import type {Entry} from '@/lib/acervo';
 import type {CalendarItem} from '@/lib/calendario';
 export default function HomeExperience({news,events,latest,calendar}:{news:Entry[];events:Entry[];latest:Entry[];calendar:CalendarItem[]}){
@@ -43,6 +44,7 @@ export default function HomeExperience({news,events,latest,calendar}:{news:Entry
    <div className="hero-bottom"><a href="#calendario"><ArrowDown size={17}/> ROLE PARA DESCOBRIR</a><span>01 — A NOSSA ESSÊNCIA</span><span className="hero-progress"><i className="hero-progress-fill"/></span></div>
   </section>
   <div className="color-ribbon"><span/><span/><span/></div>
+  <AsenaGallery/>
   <section id="calendario" className="section calendar-section"><div className="section-label"><span>AGENDA 2026</span><span>CALENDÁRIO GAÚCHO DE CANOAGEM</span></div><div className="section-heading"><ScrollReveal>Rios que formam campeões.</ScrollReveal><p>As etapas da canoagem gaúcha em 2026.<br/>Prepare sua equipe para a próxima largada.</p></div><ol className="calendar-grid">{calendar.map(ev=><li key={ev.date} className={`calendar-card tone-${ev.status==='done'?'done':ev.tone}${ev.status==='next'?' is-next':''}`} data-reveal><span className="calendar-status">{ev.status==='done'?<><Check size={14} strokeWidth={3}/> Realizada</>:ev.status==='next'?'Próxima etapa':''}</span><time dateTime={ev.date}><strong>{ev.day}</strong><span>{ev.month}<br/>{ev.year}</span></time><div className="calendar-place"><MapPin size={18}/><span>{ev.city}</span></div><p>{ev.title}<br/><b>{ev.detail}</b></p></li>)}</ol><p className="calendar-note">Datas sujeitas a alteração. Confirme nos comunicados oficiais da FGC.</p></section>
   <section id="federacao" className="section intro"><div className="section-label"><span>01 / A FEDERAÇÃO</span><span>JUNTOS, DENTRO E FORA D’ÁGUA</span></div><div className="intro-grid"><ScrollReveal>Muito além da linha de chegada.</ScrollReveal><div className="intro-copy"><p>A canoagem gaúcha é feita de gente. De quem chega para aprender, de quem treina todos os dias e de quem ajuda o esporte a seguir em frente.</p><p>A Federação Gaúcha de Canoagem conecta essa comunidade. Aqui você encontra as competições, as conquistas e a memória do nosso esporte.</p><a className="text-link" href="/historia">Conheça nossa história <ArrowUpRight size={18}/></a></div></div></section>
   <HomeSections news={news} events={events} latest={latest}/>

@@ -13,6 +13,14 @@ type EmbeddedTerm = {id: number; slug: string; name: string; taxonomy: string};
 type EmbeddedMedia = {code?: string; source_url?: string; media_details?: {sizes?: Record<string, {source_url: string}>}};
 type LivePost = RawRecord & {_embedded?: {'wp:featuredmedia'?: EmbeddedMedia[]; 'wp:term'?: EmbeddedTerm[][]}};
 
+// Sites gratuitos do WordPress.com respondem HTML em /wp-json; a mesma API fica em public-api.
+function postsEndpoint(origin: string) {
+  const host = new URL(origin).hostname;
+  return host.endsWith('.wordpress.com')
+    ? `https://public-api.wordpress.com/wp/v2/sites/${host}/posts`
+    : `${origin}/wp-json/wp/v2/posts`;
+}
+
 // Sem LIVE_WORDPRESS_ORIGIN configurado, ou em erro/timeout: retorna vazio sem quebrar o
 // site. Trade-off aceito: se o WordPress novo cair depois de já ter mostrado conteúdo ao
 // vivo, esse conteúdo some no próximo ciclo de revalidação em vez de manter a última versão
@@ -20,7 +28,7 @@ type LivePost = RawRecord & {_embedded?: {'wp:featuredmedia'?: EmbeddedMedia[]; 
 export const getLiveContent = cache(async (): Promise<LiveContent> => {
   if (!ORIGIN) return EMPTY;
   try {
-    const url = `${ORIGIN}/wp-json/wp/v2/posts?per_page=20&_embed=wp:featuredmedia,wp:term&orderby=date&order=desc`;
+    const url = `${postsEndpoint(ORIGIN)}?per_page=20&_embed=wp:featuredmedia,wp:term&orderby=date&order=desc`;
     const res = await fetch(url, {next: {revalidate: REVALIDATE}, signal: AbortSignal.timeout(5000)});
     if (!res.ok) throw new Error(`WP ao vivo respondeu ${res.status}`);
     const posts = (await res.json()) as LivePost[];

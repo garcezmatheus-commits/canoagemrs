@@ -1,18 +1,18 @@
 'use client';
-import {useState,useMemo,useEffect} from 'react';
+import {useState,useMemo} from 'react';
 import Link from 'next/link';
 import {Search,ArrowUpRight,X} from 'lucide-react';
 import type {Entry} from '@/lib/acervo';
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
 type Category={id:number;slug:string;name:string;count:number};
 const normalize=(s:string)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const governanceSlugPages=['diretoria','estatuto','estatuto-2024','estatuto-fgc','balanco','governanca','galeria-dos-ex-presidentes','institucional'];
+const governanceCategorySlugs=['institucional','governanca','balanco','editais-de-assembleia','editais-de-convocacao'];
+const circularesCategorySlugs=['circulares','editais-de-assembleia','editais-de-convocacao'];
+// O pai troca a `key` quando `?categoria=` muda, ent\u00e3o o estado inicial basta.
 export default function ArchiveBrowser({entries,categories,initialCategory}:{entries:Entry[];categories:Category[];initialCategory:string}){
  const [query,setQuery]=useState(''),[category,setCategory]=useState(initialCategory||'todos'),[year,setYear]=useState('todos'),[limit,setLimit]=useState(24);
- useEffect(()=>{setCategory(initialCategory||'todos');setLimit(24)},[initialCategory]);
  const years=useMemo(()=>[...new Set(entries.map(e=>e.date.slice(0,4)))].sort().reverse(),[entries]);
- const governanceSlugPages=['diretoria','estatuto','estatuto-2024','estatuto-fgc','balanco','governanca','galeria-dos-ex-presidentes','institucional'];
- const governanceCategorySlugs=['institucional','governanca','balanco','editais-de-assembleia','editais-de-convocacao'];
- const circularesCategorySlugs=['circulares','editais-de-assembleia','editais-de-convocacao'];
  const governanceCategoryIds=useMemo(()=>categories.filter(c=>governanceCategorySlugs.includes(c.slug)).map(c=>c.id),[categories]);
  const circularesCategoryIds=useMemo(()=>categories.filter(c=>circularesCategorySlugs.includes(c.slug)).map(c=>c.id),[categories]);
  const filtered=useMemo(()=>entries.filter(e=>{

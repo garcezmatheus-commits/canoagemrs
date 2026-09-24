@@ -4,8 +4,10 @@ import SiteHeader from '@/components/site-header';
 import SiteFooter from '@/components/site-footer';
 import ScrollReveal from '@/components/react-bits/ScrollReveal';
 import {records,contentHTML} from '@/lib/acervo';
+import {pageOpenGraph} from '@/lib/site';
 
-export const metadata={title:'Nossa história — Federação Gaúcha de Canoagem',description:'As origens da canoagem, sua trajetória no Rio Grande do Sul e a memória preservada pela FGC.'};
+const description='As origens da canoagem, sua trajetória no Rio Grande do Sul e a memória preservada pela FGC.';
+export const metadata={title:'Nossa história — Federação Gaúcha de Canoagem',description,alternates:{canonical:'/historia'},openGraph:pageOpenGraph({title:'Nossa história — Federação Gaúcha de Canoagem',description,url:'/historia'})};
 
 // Milestones summarized from the institutional text; the full text remains below.
 const milestones=[

@@ -5,8 +5,9 @@ import SiteHeader from '@/components/site-header';
 import SiteFooter from '@/components/site-footer';
 import {contentHTML,dateLabel} from '@/lib/acervo';
 import {getSiteContent} from '@/lib/site-content';
+import {pageOpenGraph} from '@/lib/site';
 import snapshot from '@/data/acervo.json';
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const {entries}=await getSiteContent();const e=entries.find(p=>p.slug===slug);return {title:e?e.title+' — FGC':'Publicação não encontrada — FGC',description:e?.excerpt.slice(0,160)}}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const {entries}=await getSiteContent();const e=entries.find(p=>p.slug===slug);if(!e)return {title:'Publicação não encontrada — FGC'};const title=e.title+' — FGC';const description=(e.excerpt||e.search).replace(/\[.*?\]/g,'').trim().slice(0,160)||'Publicação do acervo da Federação Gaúcha de Canoagem.';return {title,description,alternates:{canonical:'/acervo/'+slug},openGraph:pageOpenGraph({type:'article',title,description,url:'/acervo/'+slug,publishedTime:e.date,...(e.image?{images:[{url:e.image}]}:{})})}}
 export default async function Article({params}:{params:Promise<{slug:string}>}){
  const {slug}=await params;const {entries,records}=await getSiteContent();const e=entries.find(p=>p.slug===slug);const record=records.find(p=>p.slug===slug);if(!e||!record)notFound();
  const docs=e.source==='archive'?snapshot.media.filter(m=>m.post===e.id&&!m.mime_type.startsWith('image/')):[];

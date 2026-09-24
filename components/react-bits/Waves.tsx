@@ -61,7 +61,7 @@ class Noise {
     seed = Math.floor(seed);
     if (seed < 256) seed |= seed << 8;
     for (let i = 0; i < 256; i++) {
-      let v = i & 1 ? this.p[i] ^ (seed & 255) : this.p[i] ^ ((seed >> 8) & 255);
+      const v = i & 1 ? this.p[i] ^ (seed & 255) : this.p[i] ^ ((seed >> 8) & 255);
       this.perm[i] = this.perm[i + 256] = v;
       this.gradP[i] = this.gradP[i + 256] = this.grad3[v % 12];
     }
@@ -166,7 +166,7 @@ const Waves: React.FC<WavesProps> = ({
     left: 0,
     top: 0
   });
-  const noiseRef = useRef(new Noise(Math.random()));
+  const noiseRef = useRef<Noise | null>(null);
   const linesRef = useRef<Point[][]>([]);
   const mouseRef = useRef<Mouse>({
     x: -10,
@@ -255,7 +255,7 @@ const Waves: React.FC<WavesProps> = ({
     function movePoints(time: number) {
       const lines = linesRef.current;
       const mouse = mouseRef.current;
-      const noise = noiseRef.current;
+      const noise = (noiseRef.current ??= new Noise(Math.random()));
       const { waveSpeedX, waveSpeedY, waveAmpX, waveAmpY, friction, tension, maxCursorMove } = configRef.current;
       lines.forEach(pts => {
         pts.forEach(p => {

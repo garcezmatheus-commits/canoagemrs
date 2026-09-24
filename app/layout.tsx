@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
+import { SITE_URL, SITE_INDEXABLE, pageOpenGraph } from "@/lib/site";
 import "./globals.css";
 
+const description = "A força da nossa remada. Competições, resultados, notícias e a história da canoagem no Rio Grande do Sul.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "FGC — Federação Gaúcha de Canoagem",
-  description: "A força da nossa remada. Competições, resultados, notícias e a história da canoagem no Rio Grande do Sul.",
-  icons: {
-    icon: "/logo-fgc.jpeg",
-    shortcut: "/logo-fgc.jpeg",
-  },
+  description,
+  alternates: { canonical: "/" },
+  openGraph: pageOpenGraph({ title: "FGC — Federação Gaúcha de Canoagem", description, url: "/" }),
+  twitter: { card: "summary_large_image" },
+  robots: SITE_INDEXABLE ? undefined : { index: false, follow: true },
 };
 
 export default function RootLayout({

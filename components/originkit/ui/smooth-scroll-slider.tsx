@@ -1,7 +1,9 @@
 "use client"
 
+// Adaptado do Smooth Scroll Slider (Originkit): roda vertical livre, pausa fora da tela, foto só ao aparecer e teclado.
+
 import { useEffect, useMemo, useRef, useState } from "react"
-import type { CSSProperties } from "react"
+import type { CSSProperties, KeyboardEvent } from "react"
 
 type ImageValue = string | { src?: string; alt?: string } | null | undefined
 
@@ -9,6 +11,7 @@ type ImageInput = ImageValue | { image?: ImageValue; offsetY?: number }
 
 interface Slide {
     src: string | null
+    alt: string
     offsetY: number
 }
 
@@ -29,6 +32,7 @@ export interface SmoothScrollSliderProps {
 
     sensitivity?: number
     loop?: boolean
+    label?: string
     style?: CSSProperties
 }
 
@@ -45,17 +49,17 @@ function clamp(value: number, min: number, max: number): number {
     return Math.min(max, Math.max(min, value))
 }
 
-function resolveSrc(value: ImageValue): string | null {
+function resolveImage(value: ImageValue): { src: string; alt: string } | null {
     if (!value) return null
-    if (typeof value === "string") return value || null
+    if (typeof value === "string") return value ? { src: value, alt: "" } : null
     const src = value.src
-    return typeof src === "string" && src ? src : null
+    return typeof src === "string" && src ? { src, alt: value.alt ?? "" } : null
 }
 
-function imageOf(item: ImageInput): string | null {
+function imageOf(item: ImageInput): { src: string; alt: string } | null {
     if (item && typeof item === "object" && "image" in item)
-        return resolveSrc(item.image)
-    return resolveSrc(item as ImageValue)
+        return resolveImage(item.image)
+    return resolveImage(item as ImageValue)
 }
 
 function offsetOf(item: ImageInput): number {
@@ -87,18 +91,7 @@ interface Frame {
 }
 
 export default function SmoothScrollSlider({
-    images = [
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1557747357-b3302a733ae4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTMxfHxVc2VyJTIwcHJvZmlsZSUyMGltYWdlJTIwdmlicmFudHxlbnwwfDB8MHx8fDI%3D"},"offsetY":0},
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1637961239801-d0dfcc1a9340?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjEyfHxVc2VyJTIwcHJvZmlsZSUyMGltYWdlJTIwdmlicmFudHxlbnwwfDB8MHx8fDI%3D"},"offsetY":0},
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1579205149708-f5b24c5a04e5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fFVzZXIlMjBwcm9maWxlJTIwaW1hZ2UlMjB2aWJyYW50fGVufDB8MHwwfHx8Mg%3D%3D"},"offsetY":0},
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1748572495955-4f301f8e93ba?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fFVzZXIlMjBwcm9maWxlJTIwaW1hZ2UlMjB2aWJyYW50fGVufDB8MHwwfHx8Mg%3D%3D"},"offsetY":0},
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1664705792423-89f2016228eb?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzd8fFVzZXIlMjBwcm9maWxlJTIwaW1hZ2UlMjB2aWJyYW50fGVufDB8MHwwfHx8Mg%3D%3D"},"offsetY":0},
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1758600433991-933fb663161f?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjZ8fFVzZXIlMjBwcm9maWxlJTIwaW1hZ2UlMjB2aWJyYW50fGVufDB8MHwwfHx8Mg%3D%3D"},"offsetY":0},
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1643325297990-cbdde391d7c8?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njd8fFVzZXIlMjBwcm9maWxlJTIwaW1hZ2UlMjB2aWJyYW50fGVufDB8MHwwfHx8Mg%3D%3D"},"offsetY":0},
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1601233750964-940fc7080ba5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAwfHxVc2VyJTIwcHJvZmlsZSUyMGltYWdlJTIwdmlicmFudHxlbnwwfDB8MHx8fDI%3D"},"offsetY":0},
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1748154228682-4be26335c713?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTk1fHxVc2VyJTIwcHJvZmlsZSUyMGltYWdlJTIwdmlicmFudHxlbnwwfDB8MHx8fDI%3D"},"offsetY":0},
-        {"image":{"alt":"","src":"https://images.unsplash.com/photo-1631700010907-eeca2d4f2a39?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjA5fHxVc2VyJTIwcHJvZmlsZSUyMGltYWdlJTIwdmlicmFudHxlbnwwfDB8MHx8fDI%3D"},"offsetY":0},
-    ],
+    images = [],
     slideWidth = 400,
     slideHeight = 400,
     spacing = 2,
@@ -109,6 +102,7 @@ export default function SmoothScrollSlider({
     background = "#000000",
     sensitivity = 5,
     loop = true,
+    label = "Galeria de fotos",
     style,
 }: SmoothScrollSliderProps) {
     const containerRef = useRef<HTMLDivElement | null>(null)
@@ -120,13 +114,14 @@ export default function SmoothScrollSlider({
     const source = useMemo<Slide[]>(() => {
         const resolved: Slide[] = []
         for (const item of images ?? []) {
-            const src = imageOf(item)
-            if (src) resolved.push({ src, offsetY: offsetOf(item) })
+            const image = imageOf(item)
+            if (image) resolved.push({ ...image, offsetY: offsetOf(item) })
         }
         return resolved.length
             ? resolved
             : Array.from({ length: PLACEHOLDER_COUNT }, () => ({
                   src: null,
+                  alt: "",
                   offsetY: 0,
               }))
     }, [images])
@@ -162,21 +157,24 @@ export default function SmoothScrollSlider({
         loop: true,
         flip: false,
     })
-    frame.current = {
-        count: slides.length,
-        step,
-        slideWidth,
-        width,
-        ease,
-        maxScale: MAX_SCALE,
-        minScale: MIN_SCALE,
-        dim: dimAmount,
-        loop,
-        flip,
-    }
+    const input = useRef({ wheelMultiplier, dragMultiplier, flip, step })
 
-    const input = useRef({ wheelMultiplier, dragMultiplier, flip })
-    input.current = { wheelMultiplier, dragMultiplier, flip }
+    // Os valores do render chegam ao loop de animação por refs, atualizadas depois do commit.
+    useEffect(() => {
+        frame.current = {
+            count: slides.length,
+            step,
+            slideWidth,
+            width,
+            ease,
+            maxScale: MAX_SCALE,
+            minScale: MIN_SCALE,
+            dim: dimAmount,
+            loop,
+            flip,
+        }
+        input.current = { wheelMultiplier, dragMultiplier, flip, step }
+    })
 
     useEffect(() => {
         const node = containerRef.current
@@ -185,7 +183,6 @@ export default function SmoothScrollSlider({
             setWidth(entries[0].contentRect.width)
         })
         observer.observe(node)
-        setWidth(node.getBoundingClientRect().width)
         return () => observer.disconnect()
     }, [])
 
@@ -194,8 +191,11 @@ export default function SmoothScrollSlider({
     }, [slides.length])
 
     useEffect(() => {
+        const node = containerRef.current
+        if (!node) return
         let raf = 0
         let last = 0
+        let running = false
 
         const tick = (now: number) => {
             raf = requestAnimationFrame(tick)
@@ -223,8 +223,8 @@ export default function SmoothScrollSlider({
             const half = c.width / 2
 
             for (let i = 0; i < c.count; i += 1) {
-                const node = nodes.current[i]
-                if (!node) continue
+                const slide = nodes.current[i]
+                if (!slide) continue
 
                 const raw = i * c.step - current.current + pad
 
@@ -243,31 +243,53 @@ export default function SmoothScrollSlider({
                 }
 
                 const left = c.flip ? c.width - c.slideWidth - (x + push) : x + push
-                node.style.transform = `translate3d(${left}px, -50%, 0) scale(${scale})`
+                slide.style.transform = `translate3d(${left}px, -50%, 0) scale(${scale})`
+
+                // A foto só é pedida quando o slide entra na área visível do slider.
+                const img = slide.firstElementChild as HTMLImageElement | null
+                if (img?.dataset.src && !img.getAttribute("src") && left < c.width && left + c.slideWidth * scale > 0)
+                    img.src = img.dataset.src
 
                 if (c.dim > 0 && scale < 1) {
                     const t = (1 - scale) / Math.max(0.001, 1 - c.minScale)
-                    node.style.filter = `brightness(${1 - t * c.dim})`
+                    slide.style.filter = `brightness(${1 - t * c.dim})`
                 } else {
-                    node.style.filter = "none"
+                    slide.style.filter = "none"
                 }
             }
         }
 
-        raf = requestAnimationFrame(tick)
-        return () => cancelAnimationFrame(raf)
+        const start = () => {
+            if (running) return
+            running = true
+            last = 0
+            raf = requestAnimationFrame(tick)
+        }
+        const stop = () => {
+            running = false
+            cancelAnimationFrame(raf)
+        }
+
+        // Só anima enquanto a galeria está na tela.
+        const visibility = new IntersectionObserver(
+            ([entry]) => (entry.isIntersecting ? start() : stop()),
+            { rootMargin: "400px" }
+        )
+        visibility.observe(node)
+        return () => {
+            visibility.disconnect()
+            stop()
+        }
     }, [])
 
     useEffect(() => {
         const node = containerRef.current
         if (!node) return
+        // Só gesto horizontal move o slider; sem Lenis, capturar a roda vertical travava a página.
         const onWheel = (event: WheelEvent) => {
+            if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return
             event.preventDefault()
-            const dominant =
-                Math.abs(event.deltaX) > Math.abs(event.deltaY)
-                    ? event.deltaX
-                    : event.deltaY
-            target.current += dominant * input.current.wheelMultiplier
+            target.current += event.deltaX * input.current.wheelMultiplier
         }
         node.addEventListener("wheel", onWheel, { passive: false })
         return () => node.removeEventListener("wheel", onWheel)
@@ -310,9 +332,21 @@ export default function SmoothScrollSlider({
         }
     }, [])
 
+    const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return
+        event.preventDefault()
+        const forward = event.key === "ArrowRight" ? 1 : -1
+        target.current += forward * (input.current.flip ? -1 : 1) * input.current.step
+    }
+
     return (
         <div
             ref={containerRef}
+            role="region"
+            aria-roledescription="carrossel"
+            aria-label={label}
+            tabIndex={0}
+            onKeyDown={onKeyDown}
             style={{
                 position: "relative",
                 width: "100%",
@@ -332,6 +366,7 @@ export default function SmoothScrollSlider({
                     ref={(el) => {
                         nodes.current[i] = el
                     }}
+                    aria-hidden={i >= source.length ? true : undefined}
                     style={{
                         position: "absolute",
                         top: "50%",
@@ -347,9 +382,13 @@ export default function SmoothScrollSlider({
                     }}
                 >
                     {slide.src ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- slide absoluto e transformado; next/image não acrescenta nada aqui
                         <img
-                            src={slide.src}
-                            alt=""
+                            src={i === 0 ? slide.src : undefined}
+                            data-src={slide.src}
+                            alt={slide.alt}
+                            loading="lazy"
+                            decoding="async"
                             draggable={false}
                             style={{
                                 width: "100%",

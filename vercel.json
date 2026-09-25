@@ -21,7 +21,7 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400" }]
     },
     {
-      "source": "/(Hero-loop.mp4|hero-velocidade.webp|velocidade-vertical.webp|og-fgc.jpg|logo-fgc.jpeg)",
+      "source": "/(Hero-loop.mp4|hero-velocidade.webp|hero-velocidade-mobile.webp|velocidade-vertical.webp|og-fgc.jpg|logo-fgc.jpeg)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }]
     }
   ]

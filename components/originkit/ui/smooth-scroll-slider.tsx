@@ -251,9 +251,9 @@ export default function SmoothScrollSlider({
                 const left = c.flip ? c.width - c.slideWidth - (x + push) : x + push
                 slide.style.transform = `translate3d(${left}px, -50%, 0) scale(${scale})`
 
-                // A foto só é pedida quando o slide entra na área visível do slider.
+                // A foto é pedida um slide antes de entrar na área visível (o scale amplia o slide para fora do left).
                 const img = slide.firstElementChild as HTMLImageElement | null
-                if (img?.dataset.src && !img.getAttribute("src") && left < c.width && left + c.slideWidth * scale > 0)
+                if (img?.dataset.src && !img.getAttribute("src") && left < c.width + c.slideWidth && left + c.slideWidth * scale > -c.slideWidth)
                     img.src = img.dataset.src
 
                 if (c.dim > 0 && scale < 1) {
@@ -394,7 +394,6 @@ export default function SmoothScrollSlider({
                     {slide.src ? (
                         // eslint-disable-next-line @next/next/no-img-element -- slide absoluto e transformado; next/image não acrescenta nada aqui
                         <img
-                            src={i === 0 ? slide.src : undefined}
                             data-src={slide.src}
                             alt={slide.alt}
                             loading="lazy"

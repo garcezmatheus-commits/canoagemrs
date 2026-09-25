@@ -17,3 +17,6 @@ export function pageOpenGraph(og: NonNullable<Metadata['openGraph']>): Metadata[
     ...og,
   };
 }
+
+export const INSTAGRAM_URL = process.env.NEXT_PUBLIC_INSTAGRAM_PROFILE_URL || 'https://www.instagram.com/canoagemgaucha/';
+export const INSTAGRAM_HANDLE = '@' + new URL(INSTAGRAM_URL).pathname.replaceAll('/', '');

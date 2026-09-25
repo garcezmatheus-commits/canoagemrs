@@ -2,8 +2,8 @@
 
 // Adaptado do Smooth Scroll Slider (Originkit): roda vertical livre, pausa fora da tela, foto só ao aparecer e teclado.
 
-import { useEffect, useMemo, useRef, useState } from "react"
-import type { CSSProperties, KeyboardEvent } from "react"
+import { useEffect, useImperativeHandle, useMemo, useRef, useState } from "react"
+import type { CSSProperties, KeyboardEvent, Ref } from "react"
 
 type ImageValue = string | { src?: string; alt?: string } | null | undefined
 
@@ -34,6 +34,11 @@ export interface SmoothScrollSliderProps {
     loop?: boolean
     label?: string
     style?: CSSProperties
+    ref?: Ref<SliderHandle>
+}
+
+export interface SliderHandle {
+    move: (direction: 1 | -1) => void
 }
 
 const PLACEHOLDER_COUNT = 8
@@ -104,6 +109,7 @@ export default function SmoothScrollSlider({
     loop = true,
     label = "Galeria de fotos",
     style,
+    ref,
 }: SmoothScrollSliderProps) {
     const containerRef = useRef<HTMLDivElement | null>(null)
     const nodes = useRef<(HTMLDivElement | null)[]>([])
@@ -332,11 +338,15 @@ export default function SmoothScrollSlider({
         }
     }, [])
 
+    const move = (direction: 1 | -1) => {
+        target.current += direction * (input.current.flip ? -1 : 1) * input.current.step
+    }
+    useImperativeHandle(ref, () => ({ move }))
+
     const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
         if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return
         event.preventDefault()
-        const forward = event.key === "ArrowRight" ? 1 : -1
-        target.current += forward * (input.current.flip ? -1 : 1) * input.current.step
+        move(event.key === "ArrowRight" ? 1 : -1)
     }
 
     return (

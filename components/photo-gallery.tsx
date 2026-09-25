@@ -4,7 +4,10 @@ import {useEffect,useRef,useState} from 'react';
 import {ArrowLeft,ArrowRight} from 'lucide-react';
 import SmoothScrollSlider,{type SliderHandle} from './originkit/ui/smooth-scroll-slider';
 
-const images = Array.from({length:19},(_,i)=>({image:`/images/galeria/galeria-${String(i+1).padStart(2,'0')}.webp`,offsetY:0}));
+// 01–19: pasta Photos-ASENA. 20–33: I etapa do Campeonato Gaúcho, Santa Tereza, 26/04/2025 (KB Comunicação),
+// intercaladas para fotos da mesma série não ficarem lado a lado.
+const order = [1,20,2,21,3,22,4,5,23,6,24,7,25,8,9,26,10,27,11,28,12,13,29,14,30,15,31,16,17,32,18,33,19];
+const images = order.map(n=>({image:`/images/galeria/galeria-${String(n).padStart(2,'0')}.webp`,offsetY:0}));
 
 export default function PhotoGallery(){
  const slider=useRef<SliderHandle>(null);
@@ -29,7 +32,10 @@ export default function PhotoGallery(){
    <SmoothScrollSlider ref={slider} images={images} label="Galeria de fotos da canoagem" slideWidth={compact?250:360} slideHeight={compact?310:470} spacing={2} direction="right" smoothness={8} radius={8} dim={7} background="#141239" sensitivity={4} loop />
   </div>
   <div className="galeria-footer">
-   <p className="galeria-hint">Arraste ou use as setas para ver as 19 fotos</p>
+   <div>
+    <p className="galeria-hint">Arraste ou use as setas para ver as {images.length} fotos</p>
+    <p className="galeria-credit">Fotos de Santa Tereza (2025): KB Comunicação</p>
+   </div>
    <div className="galeria-controls">
     <button type="button" aria-label="Foto anterior" onClick={()=>slider.current?.move(-1)}><ArrowLeft size={20}/></button>
     <button type="button" aria-label="Próxima foto" onClick={()=>slider.current?.move(1)}><ArrowRight size={20}/></button>

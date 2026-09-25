@@ -181,6 +181,7 @@ h1,h2,h3{text-wrap:balance}
 /* Galeria: setas visíveis de anterior/próxima além do arraste e do teclado. */
 .galeria-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 7% 0}
 .galeria-footer .galeria-hint{padding:0}
+.galeria-credit{margin-top:6px;color:#aaa8c2;font-size:11px;letter-spacing:.04em}
 .galeria-controls{display:flex;gap:8px}
 .galeria-controls button{display:grid;place-items:center;width:48px;height:48px;border:1px solid #ffffff70;background:transparent;color:white;transition:background .2s,color .2s,border-color .2s}
 .galeria-controls button:hover{background:var(--yellow);border-color:var(--yellow);color:var(--navy-deep)}

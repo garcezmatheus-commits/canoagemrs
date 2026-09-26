@@ -21,7 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // Barlow é a fonte dos títulos. Sem o preload ela só é pedida depois do CSS e chega após a
-  // primeira pintura; o título da abertura muda de 3 para 2 linhas na troca (CLS 0,047).
+  // primeira pintura; com ele, o texto aparece ~0,3 s antes no celular (Lighthouse, 25/09).
+  // O pulo do título na troca de fonte é resolvido pelas fontes reserva em globals.css.
   preload("/fonts/barlow.woff2", { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
   return (
     <html lang="pt-BR">

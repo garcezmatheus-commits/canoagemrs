@@ -32,8 +32,9 @@ documentos → Instagram → Seja um federado → rodapé.
   aparece número, ele informa: contagem de documentos do acervo, ano do resultado, dia da prova.
 - **Uma forma de botão:** retângulo sem arredondamento. Amarelo = ação principal; marinho =
   secundária; link sublinhado = terciária. Pílula só no controle de pausar o vídeo.
-- **Fotografia real primeiro.** O mockup gerado por IA fica restrito à hero (decisão aprovada);
-  as demais imagens são fotos reais do acervo ou da galeria.
+- **Fotografia real primeiro.** O mockup gerado por IA aparece só na hero e em "Seja um federado"
+  (caiaque ao pôr do sol, escolha do Matheus em 26/09/2026); as demais imagens são fotos reais
+  do acervo ou da galeria.
 - **Conteúdo com data explícita.** Calendário com status calculado pela data; a seção de
   competições mostra resultados (passado), nunca convite antigo escrito no futuro.
 - Página atual sublinhada no menu (mesmo sublinhado verde do hover).

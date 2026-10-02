@@ -14,9 +14,11 @@ const archiveCategoryLookup=new Map(snapshot.categories.map(c=>[c.id,c.name]));
 export const entries:Entry[]=records.map(p=>normalizeRecord(p,archiveCategoryLookup,mediaMap[p.id]?.path||'','archive')).sort((a,b)=>b.date.localeCompare(a.date));
 export const categories=snapshot.categories.map(c=>({id:c.id,name:c.name,slug:c.slug,count:c.count}));
 export const capturedAt=snapshot.capturedAt;
+// Depois que canoagemrs.com.br apontar para este site, os arquivos antigos (wp-content/uploads) saem daqui.
+const LEGACY_UPLOADS=process.env.LEGACY_UPLOADS_ORIGIN?.replace(/\/$/,'');
 export function contentHTML(html:string){
  const slugs=new Set(records.map(p=>p.slug));
- function absolute(value:string){try{const url=new URL(value,snapshot.origin);if(url.hostname==='wd10.com.br'&&url.pathname.startsWith('/fgc/wp-content/')){url.hostname='canoagemrs.com.br';url.pathname=url.pathname.replace('/fgc/','/');}if(url.hostname==='canoagemrs.com.br')url.protocol='https:';return url.href}catch{return value}}
+ function absolute(value:string){try{const url=new URL(value,snapshot.origin);if(url.hostname==='wd10.com.br'&&url.pathname.startsWith('/fgc/wp-content/')){url.hostname='canoagemrs.com.br';url.pathname=url.pathname.replace('/fgc/','/');}if(url.hostname==='canoagemrs.com.br'){url.protocol='https:';if(LEGACY_UPLOADS&&url.pathname.startsWith('/wp-content/'))return LEGACY_UPLOADS+url.pathname+url.search}return url.href}catch{return value}}
  return sanitizeHtml(html,{
  allowedTags:sanitizeHtml.defaults.allowedTags.concat(['img','figure','figcaption','iframe','video','source']),
  allowedAttributes:{a:['href','title','rel'],img:['src','alt','width','height','loading'],iframe:['src','title','allowfullscreen','loading'],video:['src','controls','poster'],source:['src','type'],td:['colspan','rowspan'],th:['colspan','rowspan']},

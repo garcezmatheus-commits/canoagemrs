@@ -193,3 +193,24 @@ h1,h2,h3{text-wrap:balance}
 @media(max-width:760px){.galeria-footer{padding:20px 6% 0}}
 /* A foto real é mais clara que o mockup antigo: degradê mais longo e denso sob a legenda. */
 .join-image:after{inset:35% 0 0;background:linear-gradient(transparent,#141239e0 72%)}
+
+/* React Bits: efeitos adicionados em 2026-10-13 */
+.hero h1 b{display:inline-block;font-weight:inherit;animation:blur-in .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(.2s + var(--i) * .09s)}
+@keyframes blur-in{from{opacity:0;filter:blur(14px);transform:translateY(.25em)}to{opacity:1;filter:blur(0);transform:none}}
+.values-strip{display:block;padding:0;overflow:hidden;gap:0}
+.velocity{overflow:hidden;padding:26px 0}
+.velocity-track{display:flex;width:max-content;will-change:transform}
+.velocity-group{display:flex;flex-shrink:0;align-items:center}
+.velocity-group>span{display:flex;align-items:center;gap:34px;padding-right:34px;white-space:nowrap}
+.velocity-group i{width:9px;height:9px;background:var(--red);border-radius:50%}
+@media (max-width:760px){.velocity{padding:18px 0}.velocity-group>span{gap:22px;padding-right:22px}}
+.calendar-card,.document-card{position:relative;overflow:hidden}
+.calendar-card::after,.document-card::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),#ffffff2e,transparent 70%)}
+.document-card::after{background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),#ffdb192e,transparent 70%)}
+.calendar-card:hover::after,.document-card:hover::after{opacity:1}
+.sticker-peel{touch-action:none;cursor:grab;transform:rotate(-4deg);transition:transform .25s cubic-bezier(.2,.7,.2,1),filter .25s;user-select:none;-webkit-user-select:none}
+.sticker-peel.is-held{cursor:grabbing;transition:none;filter:drop-shadow(0 14px 14px #00000040)}
+.sticker-peel a{display:block;-webkit-user-drag:none}
+.sticker-peel img{-webkit-user-drag:none;pointer-events:none}
+.sticker-peel:not(.is-held):hover{filter:drop-shadow(0 8px 10px #00000030)}
+@media (prefers-reduced-motion:reduce){.hero h1 b{animation:none}.sticker-peel{transition:none}}

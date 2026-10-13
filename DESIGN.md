@@ -24,7 +24,7 @@ Cabeçalho fixo → hero pinada (mockup 16:9) → faixa verde/vermelho/amarelo �
 calendário da temporada → A Federação → valores → notícias → competições e resultados →
 documentos → Instagram → Seja um federado → rodapé.
 
-- Logo em sticker no canto superior esquerdo, inclinada; encolhe ao rolar pra caber na barra fixa.
+- Logo em sticker no canto superior esquerdo, inclinada; encolhe ao rolar pra caber na barra fixa. Arquivo pronto com alfa real (`public/logo-fgc-sticker.png|webp`), sem filtro SVG.
 - Seções alternam papel/branco, marinho, verde e marinho profundo.
 
 ## Regras de sistema
@@ -50,7 +50,9 @@ documentos → Instagram → Seja um federado → rodapé.
 ## Movimento
 Hero: GSAP ScrollTrigger pina a imagem abaixo do cabeçalho por 150vh (desktop) / 100vh (móvel);
 zoom 1→1.18 e troca de mensagem. ScrollReveal nos títulos, Magnet nos CTAs, Waves no fundo da
-filiação. Lenis só com ponteiro fino. Tudo respeita `prefers-reduced-motion`.
+filiação. Adicionados em 2026-10-13: BlurText no título da hero, ScrollVelocity na faixa de valores,
+SpotlightCard nos cards do calendário e documentos, CountUp nas contagens do acervo, ClickSpark
+nos botões amarelos e StickerPeel na logo do rodapé (arrastável). Lenis só com ponteiro fino. Tudo respeita `prefers-reduced-motion`.
 
 ## Referências (repertório visual)
 Consultadas em 2026-09-24 na coleção DESIGN.md (awesome-design-md / getdesign.md). Usadas como

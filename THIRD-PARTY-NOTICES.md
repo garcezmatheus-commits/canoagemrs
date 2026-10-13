@@ -2,7 +2,7 @@
 
 ## React Bits
 
-ScrollReveal, Magnet e Waves em `components/react-bits` foram adaptados de
+ScrollReveal, Magnet, Waves, ScrollVelocity, CountUp, ClickSpark, SpotlightCard e StickerPeel em `components/react-bits` foram adaptados de
 https://github.com/DavidHDev/react-bits. As adaptações isolam a limpeza das animações,
 respeitam movimento reduzido e evitam processamento fora da área visível.
 

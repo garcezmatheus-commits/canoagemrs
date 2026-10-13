@@ -7,6 +7,8 @@ import {ArrowDown,ArrowUpRight,Check,MapPin} from 'lucide-react';
 import SiteHeader from './site-header';
 import ScrollReveal from './react-bits/ScrollReveal';
 import Magnet from './react-bits/Magnet';
+import ClickSpark from './react-bits/ClickSpark';
+import SpotlightCard from './react-bits/SpotlightCard';
 import HomeSections from './home-sections';
 import SiteFooter from './site-footer';
 import HeroMedia from './hero-media';
@@ -31,13 +33,13 @@ export default function HomeExperience({news,results,latest,docCounts,calendar}:
  return()=>{ctx.revert();gsap.ticker.remove(tick);lenis?.destroy();lenis=undefined};
  });return()=>mm.revert();
  },[]);
- return <div ref={root}><SiteHeader/><main id="conteudo">
+ return <div ref={root}><ClickSpark/><SpotlightCard/><SiteHeader/><main id="conteudo">
   <section className="hero" aria-label="Canoagem gaúcha">
    <HeroMedia/><div className="hero-shade"/>
    <div className="hero-topline"><span>FEDERAÇÃO GAÚCHA DE CANOAGEM</span><span>RIO GRANDE DO SUL · BRASIL</span></div>
    <div className="hero-lead">
     <p className="eyebrow light"><span className="flag-mark"/>O NOSSO ESPORTE. A NOSSA FORÇA.</p>
-    <h1>A força da<br/>nossa <em>remada.</em></h1>
+    <h1 aria-label="A força da nossa remada."><span aria-hidden="true"><b style={{'--i':0} as React.CSSProperties}>A</b> <b style={{'--i':1} as React.CSSProperties}>força</b> <b style={{'--i':2} as React.CSSProperties}>da</b><br/><b style={{'--i':3} as React.CSSProperties}>nossa</b> <em><b style={{'--i':4} as React.CSSProperties}>remada.</b></em></span></h1>
     <p className="hero-description">Das águas do Rio Grande do Sul para cada nova conquista.</p>
     <Magnet><a className="button button-yellow" href="#federacao">Explore a canoagem gaúcha <ArrowUpRight size={19}/></a></Magnet>
    </div>

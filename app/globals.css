@@ -228,3 +228,14 @@ body:has(.hero) .hero-topline{top:calc(var(--header-h) + 36px)}
 .site-header.over-hero .header-join{background:var(--yellow);color:var(--navy-deep)}
 .site-header.over-hero .menu-toggle{color:#fff}
 body:has(.hero) .hero-lead,body:has(.hero) .hero-story{margin-top:calc(var(--header-h) * .78)}
+
+/* Hero com foto fixa: começa abaixo do menu; a faixa do menu é céu, com a foto dissolvendo nele */
+.hero{background:#7db4f1}
+.hero-photo{inset:var(--header-h) 0 0 0;height:auto;-webkit-mask-image:linear-gradient(transparent,#000 14%);mask-image:linear-gradient(transparent,#000 14%)}
+.hero-poster{object-position:50% 0}
+@media(max-width:640px){.hero-poster{object-position:90% 0}}
+/* Foto clara: sombra mais leve, legibilidade do texto por text-shadow */
+.hero-shade{opacity:.6}
+.site-header.over-hero::before{background:linear-gradient(#14123990,#14123900)}
+.hero-lead,.hero-topline{text-shadow:0 2px 16px #0b1022b0}
+@media(max-width:640px){.hero-shade{opacity:.8}}

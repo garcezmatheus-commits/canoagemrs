@@ -214,3 +214,17 @@ h1,h2,h3{text-wrap:balance}
 .sticker-peel img{-webkit-user-drag:none;pointer-events:none}
 .sticker-peel:not(.is-held):hover{filter:drop-shadow(0 8px 10px #00000030)}
 @media (prefers-reduced-motion:reduce){.hero h1 b{animation:none}.sticker-peel{transition:none}}
+
+/* Menu transparente sobre a hero, sólido depois (2026-10-13) */
+body:has(.hero) .site-header{margin-bottom:calc(var(--header-h) * -1)}
+body:has(.hero) .hero{height:100svh;min-height:600px}
+body:has(.hero) .hero-topline{top:calc(var(--header-h) + 36px)}
+.site-header{transition:background-color .3s}
+.site-header.over-hero{background:transparent}
+.site-header.over-hero::before{content:"";position:absolute;inset:0 0 -56px;z-index:-1;pointer-events:none;background:linear-gradient(#141239cc,#14123900)}
+.site-header.over-hero .main-nav a{color:#fff;text-shadow:0 1px 10px #14123980}
+.site-header.over-hero .main-nav a:after{background:var(--yellow)}
+.site-header.over-hero .main-nav.is-open a{color:var(--navy);text-shadow:none}
+.site-header.over-hero .header-join{background:var(--yellow);color:var(--navy-deep)}
+.site-header.over-hero .menu-toggle{color:#fff}
+body:has(.hero) .hero-lead,body:has(.hero) .hero-story{margin-top:calc(var(--header-h) * .78)}
